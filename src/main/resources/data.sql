@@ -1,0 +1,9 @@
+INSERT INTO roles(name) VALUES ('PLAYER')
+    ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO roles(name) VALUES ('ORGANIZER')
+    ON CONFLICT (name) DO NOTHING;
+
+INSERT INTO roles(name) VALUES ('ADMIN')
+    ON CONFLICT (name) DO NOTHING;
+
