@@ -18,26 +18,22 @@ public class Match {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /* ---- Problem ---- */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "problem_id", nullable = false)
     private Problem problem;
 
-    /* ---- Tournament (optional) ---- */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
-    /* ---- Status ---- */
     @Column(nullable = false, length = 20)
     private String status; // PENDING, RUNNING, FINISHED
 
-    /* ---- Winner ---- */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "winner_submission_id")
     private Submission winnerSubmission;
 
-    /* ---- Replay ---- */
+    @Column(nullable = true)
     private String eventsUrl;
 
     @Column(nullable = false)
