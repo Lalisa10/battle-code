@@ -56,7 +56,7 @@ public class SubmissionService {
         }
 
         // ----- Save file -----
-        String subDir = "submissions/" + Year.now() + "/" + MonthDay.now().getMonthValue();
+        String subDir = "submissions/";
         Path dirPath = Paths.get(uploadDir, subDir);
         Files.createDirectories(dirPath);
 

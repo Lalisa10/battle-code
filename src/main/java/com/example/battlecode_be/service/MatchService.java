@@ -1,13 +1,18 @@
 package com.example.battlecode_be.service;
 
 import com.example.battlecode_be.dto.Create1v1MatchRequest;
+import com.example.battlecode_be.dto.MatchQueueMessage;
 import com.example.battlecode_be.model.*;
+import com.example.battlecode_be.queue.MatchQueueProducer;
 import com.example.battlecode_be.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.config.YamlProcessor;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +23,7 @@ public class MatchService {
     private final ProblemRepository problemRepository;
     private final SubmissionRepository submissionRepository;
     private final TournamentRepository tournamentRepository;
-
+    private final MatchQueueProducer matchQueueProducer;
     @Transactional
     public Match create1v1Match(Create1v1MatchRequest req) {
 
@@ -41,7 +46,7 @@ public class MatchService {
                 Match.builder()
                         .problem(problem)
                         .tournament(tournament)
-                        .status("PENDING")
+                        .status(Match.MatchStatus.PENDING)
                         .createdAt(OffsetDateTime.now())
                         .build()
         );
@@ -65,6 +70,51 @@ public class MatchService {
         );
 
         return match;
+    }
+
+    @Transactional
+    public void startMatch(Long matchId) {
+
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found"));
+        List<MatchParticipant> matchParticipants = participantRepository.findByMatchId(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match participant not found"));
+
+//        if (!Match.MatchStatus.PENDING.equals(match.getStatus())) {
+//            throw new IllegalStateException("Match is not in PENDING state");
+//        }
+
+        match.setStatus(Match.MatchStatus.RUNNING);
+        matchRepository.save(match);
+
+        List<MatchQueueMessage.SubmissionInfo> subs =
+                matchParticipants.stream()
+                        .sorted(Comparator.comparing(MatchParticipant::getSlot))
+                        .map(mp -> MatchQueueMessage.SubmissionInfo.builder()
+                                .submissionId(mp.getSubmission().getId())
+                                .slot(mp.getSlot())
+                                .codeUrl(mp.getSubmission().getCodeUrl())
+                                .build()
+                        )
+                        .toList();
+
+        MatchQueueMessage msg = MatchQueueMessage.builder()
+                .matchId(match.getId())
+                .problem(
+                        MatchQueueMessage.ProblemInfo.builder()
+                                .engine(match.getProblem().getEngineType())
+                                //.boardSize(match.getProblem().getBoardSize())
+                                //.winCondition(match.getProblem().getWinCondition())
+                                .boardSize(30)
+                                .winCondition(5)
+                                .timeLimitMs(match.getProblem().getTimeLimitMs())
+                                .build()
+                )
+                .submissions(subs)
+                .build();
+
+        matchQueueProducer.enqueue(msg);
+
     }
 }
 

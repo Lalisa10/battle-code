@@ -5,10 +5,10 @@ import com.example.battlecode_be.dto.Create1v1MatchResponse;
 import com.example.battlecode_be.model.Match;
 import com.example.battlecode_be.service.MatchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/matches")
@@ -25,7 +25,19 @@ public class MatchController {
                 .problemCode(create1V1MatchRequest.getProblemCode())
                 .submission1Id(create1V1MatchRequest.getSubmission1Id())
                 .submission2Id(create1V1MatchRequest.getSubmission2Id())
-                .status(match.getStatus())
+                .status(String.valueOf(match.getStatus()))
                 .build();
     }
+
+    @PostMapping("/{matchId}/start")
+    public ResponseEntity<?> startMatch(@PathVariable Long matchId) {
+
+        matchService.startMatch(matchId);
+
+        return ResponseEntity.accepted().body(Map.of(
+                "matchId", matchId,
+                "status", "RUNNING"
+        ));
+    }
+
 }

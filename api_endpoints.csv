@@ -1,0 +1,10 @@
+api,mo_ta,curl
+"POST /api/matches/1v1","Tao match 1v1 tu submission1Id, submission2Id, problemCode, tournamentId","curl -X POST http://localhost:8080/api/matches/1v1 -H 'Content-Type: application/json' -d '{"problemCode":"tic-tac-toe-5","submission1Id":1,"submission2Id":2,"tournamentId":10}'"
+"POST /api/matches/{matchId}/start","Bat dau match theo matchId","curl -X POST http://localhost:8080/api/matches/123/start"
+"POST /api/users","Tao user moi","curl -X POST http://localhost:8080/api/users -H 'Content-Type: application/json' -d '{"handle":"alice","email":"alice@example.com","password":"secret"}'"
+"GET /api/users/{id}","Lay thong tin user theo id","curl http://localhost:8080/api/users/123"
+"DELETE /api/users/{id}","Vo hieu hoa user theo id","curl -X DELETE http://localhost:8080/api/users/123"
+"POST /api/submissions/upload","Upload submission (multipart) voi request va file","curl -X POST http://localhost:8080/api/submissions/upload -F 'request={"handle":"alice","problemCode":"tic-tac-toe-5","language":"java"};type=application/json' -F 'file=@/path/to/code.zip'"
+"GET /api/submissions/{id}/file","Tai file submission theo id","curl http://localhost:8080/api/submissions/123/file -o submission.bin"
+"POST /api/tournaments/","Tao tournament moi","curl -X POST http://localhost:8080/api/tournaments/ -H 'Content-Type: application/json' -d '{"name":"Summer Cup","organizerHandle":"alice","problemCode":"tic-tac-toe-5"}'"
+"GET /api/problems/{code}","Lay thong tin problem theo code","curl http://localhost:8080/api/problems/tic-tac-toe-5"

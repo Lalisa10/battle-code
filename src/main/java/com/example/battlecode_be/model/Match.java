@@ -26,8 +26,9 @@ public class Match {
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
-    @Column(nullable = false, length = 20)
-    private String status; // PENDING, RUNNING, FINISHED
+    @Column(nullable = false, unique = true, length = 10)
+    @Enumerated(EnumType.STRING)
+    private MatchStatus status; // PENDING, RUNNING, FINISHED
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "winner_submission_id")
@@ -38,4 +39,10 @@ public class Match {
 
     @Column(nullable = false)
     private OffsetDateTime createdAt;
+
+    public enum MatchStatus {
+        PENDING,
+        RUNNING,
+        FINISHED
+    }
 }

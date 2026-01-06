@@ -39,6 +39,7 @@ public class SubmissionController {
         );
 
         return SubmissionResponse.builder()
+                .submissionId(sub.getId())
                 .handle(sub.getUser().getHandle())
                 .problemCode(sub.getProblem().getCode())
                 .language(sub.getLanguage())

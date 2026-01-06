@@ -5,9 +5,10 @@ import com.example.battlecode_be.model.MatchParticipantId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MatchParticipantRepository
         extends JpaRepository<MatchParticipant, MatchParticipantId> {
 
-    List<MatchParticipant> findByMatchId(Long matchId);
+    Optional<List<MatchParticipant>> findByMatchId(Long matchId);
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class SubmissionResponse {
+    private Long submissionId;
     private String handle;
     private String problemCode;
     private String language;
