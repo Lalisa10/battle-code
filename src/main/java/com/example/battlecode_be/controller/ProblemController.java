@@ -1,13 +1,12 @@
 package com.example.battlecode_be.controller;
 
+import com.example.battlecode_be.dto.CreateProblemRequest;
 import com.example.battlecode_be.dto.ProblemResponse;
 import com.example.battlecode_be.model.Problem;
 import com.example.battlecode_be.service.ProblemService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/problems")
@@ -18,6 +17,13 @@ public class ProblemController {
     @GetMapping("/{code}")
     public ProblemResponse getProblem(@PathVariable String code) {
         return toResponse(problemService.getByCode(code));
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ProblemResponse createProblem(@RequestBody CreateProblemRequest request) {
+        Problem problem = problemService.createProblem(request);
+        return toResponse(problem);
     }
 
     private ProblemResponse toResponse(Problem problem) {

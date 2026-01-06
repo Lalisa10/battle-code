@@ -4,12 +4,13 @@ import com.example.battlecode_be.dto.SubmissionResponse;
 import com.example.battlecode_be.dto.UploadSubmissionRequest;
 import com.example.battlecode_be.model.Submission;
 import com.example.battlecode_be.service.SubmissionService;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,7 @@ public class SubmissionController {
             value = "/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
+    @PreAuthorize("hasRole('PLAYER')")
     public SubmissionResponse upload(
             @RequestPart("request") UploadSubmissionRequest request,
             @RequestPart("file") MultipartFile file
@@ -48,6 +50,7 @@ public class SubmissionController {
     }
 
     @GetMapping("/{id}/file")
+    @PreAuthorize("hasRole('PLAYER')")
     public ResponseEntity<Resource> getSubmissionFile(@PathVariable Long id) {
 
         Submission sub = submissionService.getSubmissionById(id);

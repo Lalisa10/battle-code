@@ -6,6 +6,7 @@ import com.example.battlecode_be.model.Match;
 import com.example.battlecode_be.service.MatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -17,6 +18,7 @@ public class MatchController {
     private final MatchService matchService;
 
     @PostMapping("/1v1")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public Create1v1MatchResponse create1v1Match(@RequestBody Create1v1MatchRequest create1V1MatchRequest) {
         Match match = matchService.create1v1Match(create1V1MatchRequest);
         return Create1v1MatchResponse.builder()
@@ -30,6 +32,7 @@ public class MatchController {
     }
 
     @PostMapping("/{matchId}/start")
+    @PreAuthorize("hasRole('ORGANIZER') or hasRole('ADMIN')")
     public ResponseEntity<?> startMatch(@PathVariable Long matchId) {
 
         matchService.startMatch(matchId);

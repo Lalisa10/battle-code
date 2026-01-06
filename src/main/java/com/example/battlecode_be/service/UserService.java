@@ -1,6 +1,5 @@
 package com.example.battlecode_be.service;
 
-
 import com.example.battlecode_be.dto.CreateUserRequest;
 import com.example.battlecode_be.dto.UserResponse;
 import com.example.battlecode_be.model.Role;
@@ -8,16 +7,19 @@ import com.example.battlecode_be.model.User;
 import com.example.battlecode_be.repository.RoleRepository;
 import com.example.battlecode_be.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.Console;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -45,6 +47,16 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User authenticate(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(password, user.getPasswordHash())) {
+            throw new BadCredentialsException("Invalid email or password");
+        }
+
+        return user;
+    }
 
     public User getById(Long id) {
         return userRepository.findById(id)
@@ -61,5 +73,13 @@ public class UserService {
         User user = getById(id);
         user.setActive(true);
         userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        return user;
     }
 }

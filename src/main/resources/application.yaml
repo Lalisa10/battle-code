@@ -28,9 +28,9 @@ spring:
 app:
   queue:
     match: match_queue
-#  jwt:
-#    secret: trucdnd654651564848947984654das9846dsfa
-#    expiration-ms: 3600000000
+  jwt:
+    secret: trucdnd654651564848947984654das9846dsfa
+    expiration-ms: 3600000
 file:
   upload-dir: uploads
 management:
