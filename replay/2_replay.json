@@ -1,0 +1,183 @@
+{
+  "p1": "020cb256-df4b-4210-b665-ad29d92720f8.py",
+  "p2": "4f63bf05-ac21-4cde-b407-92b4ceb0e82f.py",
+  "board_size": 50,
+  "win_condition": 5,
+  "winner": 1,
+  "moves": [
+    {
+      "turn": 1,
+      "player": 1,
+      "row": 15,
+      "col": 15
+    },
+    {
+      "turn": 2,
+      "player": 2,
+      "row": 14,
+      "col": 15
+    },
+    {
+      "turn": 3,
+      "player": 1,
+      "row": 15,
+      "col": 16
+    },
+    {
+      "turn": 4,
+      "player": 2,
+      "row": 16,
+      "col": 15
+    },
+    {
+      "turn": 5,
+      "player": 1,
+      "row": 15,
+      "col": 14
+    },
+    {
+      "turn": 6,
+      "player": 2,
+      "row": 17,
+      "col": 15
+    },
+    {
+      "turn": 7,
+      "player": 1,
+      "row": 16,
+      "col": 14
+    },
+    {
+      "turn": 8,
+      "player": 2,
+      "row": 16,
+      "col": 16
+    },
+    {
+      "turn": 9,
+      "player": 1,
+      "row": 14,
+      "col": 14
+    },
+    {
+      "turn": 10,
+      "player": 2,
+      "row": 14,
+      "col": 16
+    },
+    {
+      "turn": 11,
+      "player": 1,
+      "row": 13,
+      "col": 15
+    },
+    {
+      "turn": 12,
+      "player": 2,
+      "row": 15,
+      "col": 13
+    },
+    {
+      "turn": 13,
+      "player": 1,
+      "row": 15,
+      "col": 17
+    },
+    {
+      "turn": 14,
+      "player": 2,
+      "row": 15,
+      "col": 18
+    },
+    {
+      "turn": 15,
+      "player": 1,
+      "row": 14,
+      "col": 17
+    },
+    {
+      "turn": 16,
+      "player": 2,
+      "row": 18,
+      "col": 15
+    },
+    {
+      "turn": 17,
+      "player": 1,
+      "row": 14,
+      "col": 13
+    },
+    {
+      "turn": 18,
+      "player": 2,
+      "row": 17,
+      "col": 14
+    },
+    {
+      "turn": 19,
+      "player": 1,
+      "row": 12,
+      "col": 15
+    },
+    {
+      "turn": 20,
+      "player": 2,
+      "row": 16,
+      "col": 13
+    },
+    {
+      "turn": 21,
+      "player": 1,
+      "row": 17,
+      "col": 16
+    },
+    {
+      "turn": 22,
+      "player": 2,
+      "row": 15,
+      "col": 12
+    },
+    {
+      "turn": 23,
+      "player": 1,
+      "row": 13,
+      "col": 16
+    },
+    {
+      "turn": 24,
+      "player": 2,
+      "row": 16,
+      "col": 17
+    },
+    {
+      "turn": 25,
+      "player": 1,
+      "row": 13,
+      "col": 14
+    },
+    {
+      "turn": 26,
+      "player": 2,
+      "row": 12,
+      "col": 14
+    },
+    {
+      "turn": 27,
+      "player": 1,
+      "row": 13,
+      "col": 17
+    },
+    {
+      "turn": 28,
+      "player": 2,
+      "row": 13,
+      "col": 13
+    },
+    {
+      "turn": 29,
+      "player": 1,
+      "row": 13,
+      "col": 18
+    }
+  ]
+}

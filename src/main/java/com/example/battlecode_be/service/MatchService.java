@@ -3,6 +3,7 @@ package com.example.battlecode_be.service;
 import com.example.battlecode_be.dto.Create1v1MatchRequest;
 import com.example.battlecode_be.dto.MatchQueueMessage;
 import com.example.battlecode_be.dto.MatchResponse;
+import com.example.battlecode_be.dto.SubmissionResponse;
 import com.example.battlecode_be.dto.UpdateMatchRequest;
 import com.example.battlecode_be.dto.UserResponse;
 import com.example.battlecode_be.model.*;
@@ -10,13 +11,14 @@ import com.example.battlecode_be.queue.MatchQueueProducer;
 import com.example.battlecode_be.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.config.YamlProcessor;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.LinkedHashMap;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -153,6 +155,46 @@ public class MatchService {
         return toMatchResponse(matchRepository.save(match));
     }
 
+    @Transactional
+    public List<MatchResponse> getMatchesByTournament(Long tournamentId) {
+        getTournamentOrThrow(tournamentId);
+
+        List<Match> matches = matchRepository.findByTournamentId(tournamentId);
+        return matches.stream()
+                .map(this::toMatchResponse)
+                .toList();
+    }
+
+    @Transactional
+    public List<SubmissionResponse> getSubmissionsByTournament(Long tournamentId) {
+        getTournamentOrThrow(tournamentId);
+
+        List<Match> matches = matchRepository.findByTournamentId(tournamentId);
+        if (matches.isEmpty()) {
+            return List.of();
+        }
+
+        List<Long> matchIds = matches.stream()
+                .map(Match::getId)
+                .toList();
+
+        List<MatchParticipant> participants = participantRepository.findByMatchIdIn(matchIds);
+
+        Map<Long, Submission> uniqueSubs = participants.stream()
+                .map(MatchParticipant::getSubmission)
+                .collect(Collectors.toMap(
+                        Submission::getId,
+                        submission -> submission,
+                        (existing, duplicate) -> existing,
+                        LinkedHashMap::new
+                ));
+
+        return uniqueSubs.values()
+                .stream()
+                .map(this::toSubmissionResponse)
+                .toList();
+    }
+
     private UserResponse toUserResponse(User user) {
         return UserResponse.builder()
                 .handle(user.getHandle())
@@ -187,5 +229,20 @@ public class MatchService {
                 .status(String.valueOf(match.getStatus()))
                 .eventsUrl(match.getEventsUrl())
                 .build();
+    }
+
+    private SubmissionResponse toSubmissionResponse(Submission submission) {
+        return SubmissionResponse.builder()
+                .submissionId(submission.getId())
+                .handle(submission.getUser().getHandle())
+                .problemCode(submission.getProblem().getCode())
+                .language(submission.getLanguage())
+                .codeUrl(submission.getCodeUrl())
+                .build();
+    }
+
+    private Tournament getTournamentOrThrow(Long tournamentId) {
+        return tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new IllegalArgumentException("Tournament not found"));
     }
 }

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,5 +34,9 @@ public class TournamentService {
                 .createdAt(OffsetDateTime.now())
                 .build();
         return tournamentRepository.save(tournament);
+    }
+
+    public List<Tournament> getAllTournaments() {
+        return tournamentRepository.findAll();
     }
 }
