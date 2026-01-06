@@ -5,7 +5,6 @@ import com.example.battlecode_be.dto.CreateTournamentResponse;
 import com.example.battlecode_be.model.Tournament;
 import com.example.battlecode_be.service.TournamentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

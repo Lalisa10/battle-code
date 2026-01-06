@@ -2,6 +2,8 @@ package com.example.battlecode_be.controller;
 
 import com.example.battlecode_be.dto.Create1v1MatchRequest;
 import com.example.battlecode_be.dto.Create1v1MatchResponse;
+import com.example.battlecode_be.dto.MatchResponse;
+import com.example.battlecode_be.dto.UpdateMatchRequest;
 import com.example.battlecode_be.model.Match;
 import com.example.battlecode_be.service.MatchService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,19 @@ public class MatchController {
                 "matchId", matchId,
                 "status", "RUNNING"
         ));
+    }
+
+    @GetMapping("/{id}")
+    public MatchResponse getMatch(@PathVariable Long id) {
+        return matchService.getMatchResponse(id);
+    }
+
+    @PutMapping("/{id}")
+    public MatchResponse updateMatch(
+            @PathVariable Long id,
+            @RequestBody UpdateMatchRequest request
+    ) {
+        return matchService.updateMatch(id, request);
     }
 
 }

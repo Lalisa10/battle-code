@@ -2,6 +2,9 @@ package com.example.battlecode_be.service;
 
 import com.example.battlecode_be.dto.Create1v1MatchRequest;
 import com.example.battlecode_be.dto.MatchQueueMessage;
+import com.example.battlecode_be.dto.MatchResponse;
+import com.example.battlecode_be.dto.UpdateMatchRequest;
+import com.example.battlecode_be.dto.UserResponse;
 import com.example.battlecode_be.model.*;
 import com.example.battlecode_be.queue.MatchQueueProducer;
 import com.example.battlecode_be.repository.*;
@@ -13,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -116,5 +121,71 @@ public class MatchService {
         matchQueueProducer.enqueue(msg);
 
     }
-}
 
+    @Transactional
+    public MatchResponse getMatchResponse(Long matchId) {
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found"));
+
+        return toMatchResponse(match);
+    }
+
+    @Transactional
+    public MatchResponse updateMatch(Long matchId, UpdateMatchRequest request) {
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found"));
+
+        if (request.getStatus() != null) {
+            String normalizedStatus = request.getStatus().toUpperCase(Locale.ROOT);
+            match.setStatus(Match.MatchStatus.valueOf(normalizedStatus));
+        }
+
+        if (request.getWinnerSubmissionId() != null) {
+            Submission winnerSubmission = submissionRepository.findById(request.getWinnerSubmissionId())
+                    .orElseThrow(() -> new IllegalArgumentException("Winner submission not found"));
+            match.setWinnerSubmission(winnerSubmission);
+        }
+
+        if (request.getEventsUrl() != null) {
+            match.setEventsUrl(request.getEventsUrl());
+        }
+
+        return toMatchResponse(matchRepository.save(match));
+    }
+
+    private UserResponse toUserResponse(User user) {
+        return UserResponse.builder()
+                .handle(user.getHandle())
+                .email(user.getEmail())
+                .isActive(user.isActive())
+                .roles(
+                        user.getRoles()
+                                .stream()
+                                .map(role -> role.getName().name())
+                                .collect(Collectors.toSet())
+                )
+                .build();
+    }
+
+    private MatchResponse toMatchResponse(Match match) {
+        Submission winnerSubmission = match.getWinnerSubmission();
+        UserResponse winner = null;
+        if (winnerSubmission != null) {
+            winner = toUserResponse(winnerSubmission.getUser());
+        }
+
+        Long tournamentId = null;
+        if (match.getTournament() != null) {
+            tournamentId = match.getTournament().getId();
+        }
+
+        return MatchResponse.builder()
+                .matchId(match.getId())
+                .problemCode(match.getProblem().getId())
+                .tournamentId(tournamentId)
+                .winner(winner)
+                .status(String.valueOf(match.getStatus()))
+                .eventsUrl(match.getEventsUrl())
+                .build();
+    }
+}
