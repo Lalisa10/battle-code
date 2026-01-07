@@ -14,8 +14,8 @@
     {
       "turn": 2,
       "player": 2,
-      "row": 14,
-      "col": 15
+      "row": 15,
+      "col": 16
     },
     {
       "turn": 3,
@@ -26,8 +26,8 @@
     {
       "turn": 4,
       "player": 2,
-      "row": 15,
-      "col": 16
+      "row": 16,
+      "col": 15
     },
     {
       "turn": 5,
@@ -38,8 +38,8 @@
     {
       "turn": 6,
       "player": 2,
-      "row": 16,
-      "col": 17
+      "row": 17,
+      "col": 14
     },
     {
       "turn": 7,
@@ -62,20 +62,20 @@
     {
       "turn": 10,
       "player": 2,
-      "row": 13,
-      "col": 14
+      "row": 14,
+      "col": 17
     },
     {
       "turn": 11,
       "player": 1,
-      "row": 12,
-      "col": 13
+      "row": 13,
+      "col": 18
     },
     {
       "turn": 12,
       "player": 2,
-      "row": 17,
-      "col": 18
+      "row": 18,
+      "col": 13
     }
   ]
 }

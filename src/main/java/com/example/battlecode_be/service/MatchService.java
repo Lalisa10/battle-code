@@ -112,8 +112,8 @@ public class MatchService {
                                 .engine(match.getProblem().getEngineType())
                                 //.boardSize(match.getProblem().getBoardSize())
                                 //.winCondition(match.getProblem().getWinCondition())
-                                .boardSize(30)
-                                .winCondition(5)
+                                .boardSize(30)  // temporary hard coded
+                                .winCondition(5) // temporary hard coded
                                 .timeLimitMs(match.getProblem().getTimeLimitMs())
                                 .build()
                 )
