@@ -1,5 +1,6 @@
 package com.example.battlecode_be.service;
 
+import com.example.battlecode_be.dto.SubmissionResponse;
 import com.example.battlecode_be.dto.UploadSubmissionRequest;
 import com.example.battlecode_be.model.Problem;
 import com.example.battlecode_be.model.Submission;
@@ -18,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.*;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -75,6 +77,16 @@ public class SubmissionService {
         return submissionRepository.save(submission);
     }
 
+    public List<SubmissionResponse> getSubmissionsByProblemCode(String problemCode) {
+        Problem problem = problemRepository.findByCode(problemCode)
+                .orElseThrow(() -> new IllegalArgumentException("Problem not found"));
+
+        return submissionRepository.findByProblem_Id(problem.getId())
+                .stream()
+                .map(this::toSubmissionResponse)
+                .toList();
+    }
+
     private String getExtension(String language) {
         return switch (language.toLowerCase()) {
             case "python" -> ".py";
@@ -82,5 +94,15 @@ public class SubmissionService {
             case "java" -> ".java";
             default -> throw new IllegalArgumentException("Unsupported language");
         };
+    }
+
+    private SubmissionResponse toSubmissionResponse(Submission submission) {
+        return SubmissionResponse.builder()
+                .submissionId(submission.getId())
+                .handle(submission.getUser().getHandle())
+                .problemCode(submission.getProblem().getCode())
+                .language(submission.getLanguage())
+                .codeUrl(submission.getCodeUrl())
+                .build();
     }
 }

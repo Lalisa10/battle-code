@@ -8,6 +8,7 @@ import com.example.battlecode_be.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -21,6 +22,11 @@ public class UserController {
     public UserResponse createUser(@RequestBody CreateUserRequest request) {
         User user = userService.createPlayer(request);
         return toResponse(user);
+    }
+
+    @GetMapping("/")
+    public List<UserResponse> getAllUser() {
+        return userService.getAllUser().stream().map(this::toResponse).toList();
     }
 
     @GetMapping("/{id}")

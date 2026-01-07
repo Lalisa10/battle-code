@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/submissions")
@@ -45,6 +46,11 @@ public class SubmissionController {
                 .language(sub.getLanguage())
                 .codeUrl(sub.getCodeUrl())
                 .build();
+    }
+
+    @GetMapping
+    public List<SubmissionResponse> getSubmissionsByProblemCode(@RequestParam String problemCode) {
+        return submissionService.getSubmissionsByProblemCode(problemCode);
     }
 
     @GetMapping("/{id}/file")

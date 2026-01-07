@@ -7,9 +7,16 @@ import com.example.battlecode_be.dto.UpdateMatchRequest;
 import com.example.battlecode_be.model.Match;
 import com.example.battlecode_be.service.MatchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 @RestController
@@ -40,6 +47,24 @@ public class MatchController {
                 "matchId", matchId,
                 "status", "RUNNING"
         ));
+    }
+
+    @GetMapping("/{id}/replay")
+    public ResponseEntity<Resource> getReplay(@PathVariable Long id) {
+        matchService.getMatchResponse(id);
+
+        Path replayPath = Paths.get("replay", id + "_replay.json");
+        if (!Files.exists(replayPath)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Resource resource = new FileSystemResource(replayPath);
+        String filename = replayPath.getFileName().toString();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(resource);
     }
 
     @GetMapping("/{id}")

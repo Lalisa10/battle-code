@@ -6,5 +6,6 @@ api,mo_ta,curl
 "DELETE /api/users/{id}","Vo hieu hoa user theo id","curl -X DELETE http://localhost:8080/api/users/123"
 "POST /api/submissions/upload","Upload submission (multipart) voi request va file","curl -X POST http://localhost:8080/api/submissions/upload -F 'request={"handle":"alice","problemCode":"tic-tac-toe-5","language":"java"};type=application/json' -F 'file=@/path/to/code.zip'"
 "GET /api/submissions/{id}/file","Tai file submission theo id","curl http://localhost:8080/api/submissions/123/file -o submission.bin"
+"GET /api/submissions?problemCode=code","Lay danh sach submission theo problemCode","curl \"http://localhost:8080/api/submissions?problemCode=tic-tac-toe-5\""
 "POST /api/tournaments/","Tao tournament moi","curl -X POST http://localhost:8080/api/tournaments/ -H 'Content-Type: application/json' -d '{"name":"Summer Cup","organizerHandle":"alice","problemCode":"tic-tac-toe-5"}'"
 "GET /api/problems/{code}","Lay thong tin problem theo code","curl http://localhost:8080/api/problems/tic-tac-toe-5"
