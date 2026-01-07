@@ -53,7 +53,7 @@ public class MatchController {
     public ResponseEntity<Resource> getReplay(@PathVariable Long id) {
         matchService.getMatchResponse(id);
 
-        Path replayPath = Paths.get("replay", id + "_replay.json");
+        Path replayPath = Paths.get("replay", id + "_replay.json"); // hardcoded replay directory
         if (!Files.exists(replayPath)) {
             return ResponseEntity.notFound().build();
         }
